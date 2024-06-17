@@ -1,7 +1,9 @@
 <script>
-  import Counter from './lib/Counter.svelte'
+  import Header from './lib/Header.svelte'
+  import Footer from './lib/Footer.svelte'
 </script>
 
 <main>
-  <h1 class = "font-bold underline"> Hello World </h1>
+  <Header/>
+  <Footer/>
 </main>
