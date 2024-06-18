@@ -1,14 +1,16 @@
 <script>
-  export let auth;
-  function loginHandler(){}
+    import fungo from '../assets/fungo.jpg';
+
+    export let auth;
+    function loginHandler(){}
 </script>
 
 <div id = "center">
 <div class = "m-10 flex justify-center align-top card w-96 bg-gray-800 shadow-xl">
-  <figure><img src = "https://www.nawpic.com/media/2020/memento-mori-nawpic-3.jpg" alt="bgn"/></figure>
+  <figure><img src = {fungo}  alt = "bgn"/></figure>
   <div class="card-body">
     <h2 class="card-title">
-      Register
+      Login
     </h2>
     <form on:submit|preventDefault = {loginHandler}>
       <p class="text-lg pl-1 pb-2">Email</p>
@@ -25,7 +27,7 @@
       <br>
       <div style = "witdh:100%; display: flex; justify-content: space-between">
         <button class="btn btn-outline btn-error justify-start"> Cancel </button>
-        <button class="btn btn-outline btn-success justify-end"> Register </button>
+        <button class="btn btn-outline btn-success justify-end"> Login </button>
       </div>
     </form>
   </div>
