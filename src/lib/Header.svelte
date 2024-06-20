@@ -3,6 +3,7 @@
     import PageButton from '../lib/PageButton.svelte'
     import { user } from './auth-store.js';
 
+    console.log($user);
     $: username = ($user != null) ? $user.user.email.substring(0, $user.user.email.indexOf("@")) : "user";
 
     let logoutHandler = () => {

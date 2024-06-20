@@ -5,6 +5,9 @@
   import Footer from './lib/Footer.svelte'
   import Login from './lib/Login.svelte'
   import Register from './lib/Register.svelte'
+  import { run } from './test.js';
+  import { user } from './lib/auth-store';
+
 
   const firebaseConfig = {
       apiKey: "AIzaSyA5aeP-yy8s80OMxbpZKCsJgjlCbKfuzbU",
@@ -19,12 +22,19 @@
   const app = initializeApp(firebaseConfig);
   const auth = getAuth(app);
 
+  let testHandler = () => {
+  run(app, $user.user.uid);
+  }
+
   let pageToRender = "pageNews";
   let handlePages = (event) => pageToRender = event.detail.text;
 </script>
 
 <main>
   <Header on:renderPage = {handlePages}/>
+
+  <button on:click = {testHandler}>TEST DB</button>
+
   {#if pageToRender == "pageLogin"}
     <Login auth = {auth}/>
   {/if}
