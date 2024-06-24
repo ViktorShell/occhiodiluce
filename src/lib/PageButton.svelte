@@ -1,10 +1,9 @@
 <script>
-  import { createEventDispatcher } from "svelte";
+  import { renderPage } from './renderPage';
   export let text;
-  export let pageRender;
-  let dispatch = createEventDispatcher();
+  export let renderPageProp;
   export function handleClick() {
-    dispatch('renderPage', {text: pageRender})
+    renderPage.update(() => renderPageProp)
   }
 </script>
 

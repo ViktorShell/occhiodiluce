@@ -2,6 +2,7 @@
   import fungo from '../assets/fungo.jpg';
   import { user } from './auth-store';
   import { signInWithEmailAndPassword } from 'firebase/auth';
+  import { renderPage } from './renderPage';
   export let auth;
 
   let mail = "";
@@ -17,11 +18,11 @@
     passwd = "";
   }
 
-  let registerHandler = () => {
+  let loginHandler = (event) => {
     signInWithEmailAndPassword(auth, mail, passwd)
     .then((userCredentials) => {
       user.update((n) => userCredentials);
-      console.log($user);
+      renderPage.update(() => "pageNews");
     })
     .catch((error) => {
       const errorCode = error.code;
@@ -29,7 +30,7 @@
       /* auth/invalid-email || auth/user-not-found */
       if(errorCode === "auth/invalid-email" || errorCode === "auth/user-not-found"){
         mailErrorBox = "border-2 border-rose-500";
-        errorText = "mail invalida";
+        errorText = "mail o password errata";
       }
 
       /* auth/wrong-password */
@@ -37,7 +38,8 @@
         passwdErrorBox = "border-2 border-rose-500";
       }
     })
-    mail = passwd = "";
+
+    cancelHandler();
   }
 </script>
 
@@ -48,7 +50,7 @@
     <h2 class="card-title">
       Login
     </h2>
-    <form on:submit|preventDefault>
+    <form on:submit|preventDefault = {loginHandler}>
       <p class="text-lg pl-1 pb-2">Email</p>
       <label class="input input-bordered flex items-center gap-2 {mailErrorBox}">
         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" fill="currentColor" class="w-4 h-4 opacity-70"><path d="M2.5 3A1.5 1.5 0 0 0 1 4.5v.793c.026.009.051.02.076.032L7.674 8.51c.206.1.446.1.652 0l6.598-3.185A.755.755 0 0 1 15 5.293V4.5A1.5 1.5 0 0 0 13.5 3h-11Z" /><path d="M15 6.954 8.978 9.86a2.25 2.25 0 0 1-1.956 0L1 6.954V11.5A1.5 1.5 0 0 0 2.5 13h11a1.5 1.5 0 0 0 1.5-1.5V6.954Z" /></svg>
@@ -69,7 +71,7 @@
       <br>
       <div style = "witdh:100%; display: flex; justify-content: space-between">
         <button class="btn btn-outline btn-error justify-start" on:click = {cancelHandler}> Cancel </button>
-        <button class="btn btn-outline btn-success justify-end" disabled = {isDisabled} on:click = {registerHandler}> Login </button>
+        <button type = "submit" class="btn btn-outline btn-success justify-end" disabled = {isDisabled} > Login </button>
       </div>
     </form>
   </div>

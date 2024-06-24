@@ -1,6 +1,7 @@
 <script>
   import { createUserWithEmailAndPassword } from 'firebase/auth';
   import { user } from './auth-store.js'
+  import { renderPage } from './renderPage.js';
   import mementomori from '../assets/mementomori.jpg';
 
   export let auth;
@@ -23,6 +24,7 @@
         emailErrorBox = "";
         passwdErrorBox = "";
         user.update((n) => userCredential);
+        renderPage.update(() => "pageNews");
       })
       .catch((error) => {
         const errorCode = error.code;
