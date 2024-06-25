@@ -7,37 +7,26 @@ export default defineConfig({
   plugins: [
     svelte(),
     VitePWA({
+      registerType: "autoUpdate",
+      includeAssets: ['favicon.ico', 'apple-touch-icon.png', 'mask-icon.svg'],
       manifest: {
-        name: "Occhio di Luce",
+        name: 'Occhio di Luce',
+        short_name: 'OdL',
+        description: 'Ricerchiamo la verita in ogni angolo del pianeta',
+        theme_color: '#ffffff',
         icons: [
           {
-            src: "src/assets/eye_192.jpg",
-            size: "192x192",
-            type: "image/jpg",
-            purpose: "any maskable"
+            src: 'public/eye_192.jpg',
+            sizes: '192x192',
+            type: 'image/png'
           },
           {
-            src: "src/assets/eye_512.jpg",
-            size: "512x512",
-            type: "image/jpg",
-            purpose: "any maskable"
+            src: 'public/eye_512.jpg',
+            sizes: '512x512',
+            type: 'image/png'
           }
         ]
-      },
-      workbox: {
-        runtimeCaching: {
-          urlPattern: ({ url }) => {
-            return true;
-          },
-          handler: "NetworkFirst",
-          options: {
-            cacheName: "v1",
-            cacheableResponse: {
-              statuses: [0, 200]
-            }
-          }
-        }
       }
-    })
-    ],
+    })  
+  ],
 })
