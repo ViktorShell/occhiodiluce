@@ -11,8 +11,9 @@
   import News from './lib/News.svelte'
   import MyNews from './lib/MyNews.svelte'
   import ComeLavoriamo from './lib/ComeLavoriamo.svelte'
-  import { getFirestore } from 'firebase/firestore';
-  import { initDB } from './lib/db';
+  import { initDB, fetchNews, db } from './lib/db';
+  import { onMount } from 'svelte';
+  import eye from './assets/eye.svg';
 
   const firebaseConfig = {
     apiKey: "AIzaSyA5aeP-yy8s80OMxbpZKCsJgjlCbKfuzbU",
@@ -26,7 +27,42 @@
 
   const app = initializeApp(firebaseConfig);
   const auth = getAuth(app);
-  initDB(app);
+
+
+  const notify = (text) => {
+    // Notifica
+    if("Notification" in window) {
+      Notification.requestPermission().then((perm) => {
+        if(perm === "granted")
+          new Notification("Occhio di Luce", {
+            lang: "it",
+            body: text,
+            icon: eye
+          });
+      })
+    }
+  }
+
+  let news = [];
+  onMount(async () => {
+    initDB(app);
+    let localNews = await fetchNews($db);
+    news = localNews;
+    let lastNews = localNews;
+    let flag = true;
+    setInterval(async () => {
+      if(!flag){
+        localNews = await fetchNews($db);
+        let extract = localNews.filter(element => !lastNews.includes(element))
+        if(extract.length > 0)
+        {
+          notify(`Sono state pubblicate ${extract.length} nuove News`);
+          news = localNews;
+        }
+        lastNews = localNews;
+      } else flag = false;
+    }, 10000);
+  })
 </script>
 
 <main>
