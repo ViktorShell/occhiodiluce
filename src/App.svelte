@@ -30,7 +30,6 @@
 
 
   const notify = (text) => {
-    // Notifica
     if("Notification" in window) {
       Notification.requestPermission().then((perm) => {
         if(perm === "granted")
@@ -43,32 +42,40 @@
     }
   }
 
+  let diffList = (list1, list2) => {
+    let extract = [];
+    let inside = false;
+
+    for(let a of list1) {
+      inside = false;
+      for(let b of list2)
+        if(a.id === b.id){
+          inside = true;
+          break;
+        }
+      if(!inside) extract.push(a);
+    }
+    return extract;
+  }
+
   let news = [];
   onMount(async () => {
     initDB(app);
     let localNews = await fetchNews($db);
-    let lastNews = localNews.slice(); 
+    let lastNews = localNews.slice();
+    news = localNews;
+
     let flag = false;
-
     setInterval(async () => {
-      if(flag)
-      {
-        let extract = []
+      if(flag){
         localNews = await fetchNews($db);
-        localNews.forEach((x, i) => lastNews.forEach((y, j) => {if(x == y) extract.push(x)}));
-        console.log(extract.length)
-        console.log("QUI")
-        if(extract.length > 0)
-        {
-          console.log("Notifica");
-        }
+        let ext = diffList(localNews, lastNews);
+        if(ext.length > 0)
+          notify(`Sono presenti ${ext.length} nuove News`);
+        lastNews = localNews;
+        news = localNews; // Non sono sicuro che news continui a tenere il riferimento
       } else flag = true;
-      lastNews = localNews.splice();
-    }, 10000);
-
-    //lastNews.pop();
-    //let extract = localNews.find(e => !lastNews.includes(e))
-    //console.log("Excrat", extract);
+    }, 60000);
   })
 </script>
 
@@ -79,12 +86,12 @@
   {/if}
 
   {#if $renderPage == "pageNews"}
-    <News />
+    <News news = {news} />
   {/if}
 
   {#if $renderPage == "pageMyNews"}
     {#if $user == null}
-      <News />
+      <News news = {news} />
     {:else}
       <MyNews />
     {/if}
@@ -100,7 +107,7 @@
 
   {#if $renderPage == "pagePubblica"}
     {#if $user == null}
-      <News />
+      <News news = {news} />
     {:else}
       <Pubblica />
     {/if}
