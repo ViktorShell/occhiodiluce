@@ -47,21 +47,28 @@
   onMount(async () => {
     initDB(app);
     let localNews = await fetchNews($db);
-    news = localNews;
-    let lastNews = localNews;
-    let flag = true;
+    let lastNews = localNews.slice(); 
+    let flag = false;
+
     setInterval(async () => {
-      if(!flag){
+      if(flag)
+      {
+        let extract = []
         localNews = await fetchNews($db);
-        let extract = localNews.filter(element => !lastNews.includes(element))
+        localNews.forEach((x, i) => lastNews.forEach((y, j) => {if(x == y) extract.push(x)}));
+        console.log(extract.length)
+        console.log("QUI")
         if(extract.length > 0)
         {
-          notify(`Sono state pubblicate ${extract.length} nuove News`);
-          news = localNews;
+          console.log("Notifica");
         }
-        lastNews = localNews;
-      } else flag = false;
+      } else flag = true;
+      lastNews = localNews.splice();
     }, 10000);
+
+    //lastNews.pop();
+    //let extract = localNews.find(e => !lastNews.includes(e))
+    //console.log("Excrat", extract);
   })
 </script>
 
