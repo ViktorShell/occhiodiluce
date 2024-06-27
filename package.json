@@ -22,7 +22,7 @@
   "dependencies": {
     "dompurify": "^3.1.5",
     "firebase": "^10.12.2",
-    "marked": "^13.0.0",
+    "marked": "^13.0.1",
     "markedjs": "^0.0.1-security",
     "uuid": "^10.0.0",
     "vite-plugin-pwa": "^0.20.0"

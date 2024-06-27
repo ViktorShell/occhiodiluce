@@ -3,25 +3,42 @@
   import { marked } from 'marked'; // Markdown parser
   import { user } from './auth-store';
   import { db } from './db';
-  import { Timestamp, collection, addDoc } from 'firebase/firestore';
+  import { Timestamp, collection, addDoc, deleteDoc, doc } from 'firebase/firestore';
+  import { article } from './modify_article';
 
-  let title = "";
-  let text = "";
+  export let title = "";
+  export let text = "";
+
   $: marktext = DOMPurify.sanitize(marked.parse(text));
   $: disabled = text == "" || title == "";
 
+  if($article != null) {
+    title = $article.title;
+    text = $article.title;
+  }
+  else
+  {
+    title = text = "";
+  }
+
   const pushArticle = async () => {
-    const article = {
+    const current_article = {
       author_uid: $user.user.uid,
       date: Timestamp.now(),
       title: title,
-      text: text
+      text: marktext
     };
 
-    await addDoc(collection($db, "news"), article)
+    if($article != null) {
+      await deleteDoc(doc($db, "news", $article.id))
+      .catch((error) => console.log(error));
+    }
+
+    await addDoc(collection($db, "news"), current_article)
     .catch((error) => { console.log(error); })
 
     title = text = "";
+    $article = null;
   }
 </script>
 
@@ -37,7 +54,7 @@
     rows = "10"
     />
     <div class = "flex justify-between">
-      <button class = "btn btn-error" on:click={() => {title = text = ""}}>Cancella</button>
+      <button class = "btn btn-error" on:click={() => {title = text = ""; $article.update(() => null)}}>Cancella</button>
       <button class = "btn btn-success" disabled = {disabled} on:click = {pushArticle} >Pubblica</button>
     </div>
   </div>

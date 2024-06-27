@@ -59,6 +59,7 @@
   }
 
   let news = [];
+
   onMount(async () => {
     initDB(app);
     let localNews = await fetchNews($db);
@@ -75,7 +76,7 @@
         lastNews = localNews;
         news = localNews; // Non sono sicuro che news continui a tenere il riferimento
       } else flag = true;
-    }, 60000);
+    }, 30000);
   })
 </script>
 
@@ -93,7 +94,7 @@
     {#if $user == null}
       <News news = {news} />
     {:else}
-      <MyNews />
+      <MyNews news = {news} />
     {/if}
   {/if}
 

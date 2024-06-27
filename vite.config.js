@@ -40,23 +40,6 @@ export default defineConfig({
           }
         ]
       },
-      workbox: {
-        runtimeCaching: [
-          {
-            urlPattern: /\.(css|html|js|png|jpg|svg)$/i,
-            handler: 'CacheFirst',
-            options: {
-              cacheName: 'static-cache',
-              expiration: {
-                maxAgeSeconds: 60 * 60 
-              },
-              cacheableResponse: {
-                statuses: [0, 200]
-              }
-            }
-          }
-        ]
-      }
     })  
   ],
 })
