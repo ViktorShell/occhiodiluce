@@ -14,7 +14,7 @@
 
   if($article != null) {
     title = $article.title;
-    text = $article.title;
+    text = $article.text;
   }
   else
   {
