@@ -76,7 +76,7 @@
         lastNews = localNews;
         news = localNews; // Non sono sicuro che news continui a tenere il riferimento
       } else flag = true;
-    }, 30000);
+    }, 5000);
   })
 </script>
 
